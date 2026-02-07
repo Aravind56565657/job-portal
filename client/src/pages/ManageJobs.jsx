@@ -81,10 +81,10 @@ const ManageJobs = () => {
                                         View Applicants
                                     </Link>
                                     <Link
-                                        to={`/jobs/${job._id}`}
-                                        className="px-4 py-2 border border-gray-200 text-gray-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+                                        to={`/employer/jobs/edit/${job._id}`}
+                                        className="px-4 py-2 border border-blue-200 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors"
                                     >
-                                        View
+                                        Edit
                                     </Link>
                                     <button
                                         onClick={() => handleDelete(job._id)}

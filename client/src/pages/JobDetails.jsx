@@ -54,15 +54,31 @@ const JobDetails = () => {
                 <div className="space-y-6">
                     <div>
                         <h3 className="text-xl font-semibold mb-2">Description</h3>
-                        <p className="text-gray-700 whitespace-pre-line">{job.description}</p>
+                        <p className="text-gray-700 whitespace-pre-line leading-relaxed">{job.description}</p>
                     </div>
                     <div>
                         <h3 className="text-xl font-semibold mb-2">Responsibilities</h3>
-                        <p className="text-gray-700 whitespace-pre-line">{job.responsibilities}</p>
+                        {Array.isArray(job.responsibilities) && job.responsibilities.length > 0 ? (
+                            <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                                {job.responsibilities.map((res, index) => (
+                                    <li key={index}>{res}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-700 whitespace-pre-line">{job.responsibilities}</p>
+                        )}
                     </div>
                     <div>
                         <h3 className="text-xl font-semibold mb-2">Qualifications</h3>
-                        <p className="text-gray-700 whitespace-pre-line">{job.qualifications}</p>
+                        {Array.isArray(job.qualifications) && job.qualifications.length > 0 ? (
+                            <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                                {job.qualifications.map((qual, index) => (
+                                    <li key={index}>{qual}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-700 whitespace-pre-line">{job.qualifications}</p>
+                        )}
                     </div>
                 </div>
             </div>

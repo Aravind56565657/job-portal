@@ -20,8 +20,9 @@ const createJob = async (req, res) => {
             employer: req.user.id,
             title,
             description,
-            qualifications,
-            responsibilities,
+            // Ensure these are arrays, generic split if string
+            qualifications: Array.isArray(qualifications) ? qualifications : qualifications.split('\n').filter(i => i.trim()),
+            responsibilities: Array.isArray(responsibilities) ? responsibilities : responsibilities.split('\n').filter(i => i.trim()),
             location,
             salaryRange,
             jobType,
@@ -87,7 +88,16 @@ const updateJob = async (req, res) => {
             return res.status(401).json({ message: 'User not authorized' });
         }
 
-        const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, {
+        // Process arrays if they are strings
+        let updateData = { ...req.body };
+        if (typeof updateData.qualifications === 'string') {
+            updateData.qualifications = updateData.qualifications.split('\n').filter(i => i.trim());
+        }
+        if (typeof updateData.responsibilities === 'string') {
+            updateData.responsibilities = updateData.responsibilities.split('\n').filter(i => i.trim());
+        }
+
+        const updatedJob = await Job.findByIdAndUpdate(req.params.id, updateData, {
             new: true,
             runValidators: true,
         });

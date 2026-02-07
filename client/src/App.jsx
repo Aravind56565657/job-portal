@@ -16,6 +16,7 @@ import JobDetails from './pages/JobDetails';
 import ManageJobs from './pages/ManageJobs';
 import JobApplicants from './pages/JobApplicants';
 import MyApplications from './pages/MyApplications';
+import EditJob from './pages/EditJob'; // Import EditJob
 import Onboarding from './pages/Onboarding'; // Import Onboarding
 
 
@@ -81,6 +82,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={['employer']}>
                   <ManageJobs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/employer/jobs/edit/:id"
+              element={
+                <ProtectedRoute allowedRoles={['employer']}>
+                  <EditJob />
                 </ProtectedRoute>
               }
             />
