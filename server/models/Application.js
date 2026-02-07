@@ -13,8 +13,22 @@ const applicationSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Applied', 'Reviewed', 'Interviewing', 'Rejected', 'Hired'],
+        enum: ['Applied', 'Reviewed', 'Shortlisted', 'Interviewing', 'Rejected', 'Hired'],
         default: 'Applied',
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    portfolioLink: {
+        type: String,
+    },
+    experience: {
+        type: String, // e.g., "3 years"
     },
     resume: {
         type: String, // URL specifically for this application if different from profile

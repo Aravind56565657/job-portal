@@ -6,7 +6,7 @@ const Job = require('../models/Job');
 // @access  Private (Job Seeker)
 const applyForJob = async (req, res) => {
     try {
-        const { jobId, resume, coverLetter } = req.body;
+        const { jobId, resume, coverLetter, email, phone, portfolioLink, experience } = req.body;
 
         const job = await Job.findById(jobId);
         if (!job) {
@@ -34,6 +34,10 @@ const applyForJob = async (req, res) => {
             applicant: req.user.id,
             resume: resumeUrl,
             coverLetter,
+            email,
+            phone,
+            portfolioLink,
+            experience
         });
 
         res.status(201).json(application);
@@ -72,7 +76,7 @@ const getJobApplications = async (req, res) => {
         }
 
         const applications = await Application.find({ job: req.params.jobId })
-            .populate('applicant', 'name email resume');
+            .populate('applicant', 'name email resume profilePhoto');
 
         res.json(applications);
     } catch (error) {

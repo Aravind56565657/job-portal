@@ -37,6 +37,7 @@ const JobApplicants = () => {
         switch (status) {
             case 'Hired': return 'bg-green-100 text-green-700';
             case 'Rejected': return 'bg-red-100 text-red-700';
+            case 'Shortlisted': return 'bg-yellow-100 text-yellow-700';
             case 'Interviewing': return 'bg-purple-100 text-purple-700';
             case 'Reviewed': return 'bg-blue-100 text-blue-700';
             default: return 'bg-gray-100 text-gray-700';
@@ -75,37 +76,59 @@ const JobApplicants = () => {
                                     </div>
 
                                     <h3 className="text-lg font-bold text-gray-900 mb-1">{app.applicant.name}</h3>
-                                    <p className="text-gray-500 text-sm mb-4">{app.applicant.email}</p>
+                                    <div className="flex flex-wrap gap-2 mb-3 text-xs font-semibold">
+                                        <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded">📧 {app.email}</span>
+                                        <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded">📱 {app.phone}</span>
+                                        {app.experience && <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded">⭐ {app.experience}</span>}
+                                    </div>
 
-                                    <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-600 mb-4 line-clamp-3 italic">
+                                    <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-600 mb-4 line-clamp-3 italic relative group">
                                         "{app.coverLetter || "No cover letter provided."}"
+                                        <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-90 flex items-center justify-center transition-opacity border border-gray-100 rounded-lg">
+                                            <span className="text-xs font-bold text-primary-600">Read Full Letter</span>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div className="mt-4 pt-4 border-t border-gray-100 space-y-3">
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex items-center justify-between gap-2">
                                         <select
                                             value={app.status}
                                             onChange={(e) => updateStatus(app._id, e.target.value)}
-                                            className="text-sm font-semibold text-gray-700 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-primary-100 outline-none cursor-pointer"
+                                            className={`flex-1 text-sm font-bold border-none rounded-lg px-2 py-2 focus:ring-2 outline-none cursor-pointer transition-colors ${app.status === 'Shortlisted' ? 'bg-yellow-100 text-yellow-800 ring-yellow-200' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                                                }`}
                                         >
                                             <option value="Applied">New</option>
                                             <option value="Reviewed">Reviewed</option>
+                                            <option value="Shortlisted">★ Shortlisted</option>
                                             <option value="Interviewing">Interviewing</option>
                                             <option value="Hired">Hire</option>
                                             <option value="Rejected">Reject</option>
                                         </select>
 
-                                        {app.resume && (
-                                            <a href={app.resume} target="_blank" rel="noopener noreferrer" className="text-primary-600 font-bold text-sm hover:underline flex items-center gap-1">
-                                                📄 Resume
-                                            </a>
+                                        {app.status !== 'Shortlisted' && app.status !== 'Hired' && app.status !== 'Rejected' && (
+                                            <button
+                                                onClick={() => updateStatus(app._id, 'Shortlisted')}
+                                                className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 p-2 rounded-lg transition-colors"
+                                                title="Shortlist Candidate"
+                                            >
+                                                ★
+                                            </button>
                                         )}
                                     </div>
 
-                                    <button className="w-full py-2 rounded-lg border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 transition-colors text-sm">
-                                        View Full Profile
-                                    </button>
+                                    <div className="flex gap-2">
+                                        {app.resume && (
+                                            <a href={app.resume} target="_blank" rel="noopener noreferrer" className="flex-1 py-2 text-center rounded-lg border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 text-sm flex items-center justify-center gap-1">
+                                                📄 Resume
+                                            </a>
+                                        )}
+                                        {app.portfolioLink && (
+                                            <a href={app.portfolioLink} target="_blank" rel="noopener noreferrer" className="flex-1 py-2 text-center rounded-lg border border-gray-200 text-blue-600 font-semibold hover:bg-blue-50 text-sm flex items-center justify-center gap-1">
+                                                🌐 Portfolio
+                                            </a>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ))}
