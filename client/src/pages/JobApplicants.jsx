@@ -29,7 +29,8 @@ const JobApplicants = () => {
             setApplicants(applicants.map(app => app._id === appId ? { ...app, status: newStatus } : app));
         } catch (error) {
             console.error(error);
-            alert("Failed to update status");
+            console.error(error);
+            alert(error.response?.data?.message || "Failed to update status");
         }
     };
 

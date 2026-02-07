@@ -96,6 +96,11 @@ const updateApplicationStatus = async (req, res) => {
             return res.status(404).json({ message: 'Application not found' });
         }
 
+        if (!application.job) {
+            console.error(`Status update failed: Application ${req.params.id} has no associated job.`);
+            return res.status(400).json({ message: 'Application data is corrupted: No Job linked status update failure' });
+        }
+
         if (application.job.employer.toString() !== req.user.id) {
             return res.status(401).json({ message: 'Not authorized' });
         }
