@@ -36,11 +36,7 @@ const EmployerDashboard = () => {
         });
     };
 
-    const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric', month: 'short', day: 'numeric'
-        });
-    };
+
 
     return (
         <div className="pt-28 pb-12 px-6 bg-gray-50 min-h-screen font-sans">

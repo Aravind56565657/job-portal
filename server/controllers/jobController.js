@@ -39,16 +39,33 @@ const createJob = async (req, res) => {
 // @access  Public
 const getJobs = async (req, res) => {
     try {
-        const keyword = req.query.keyword
-            ? {
-                $or: [
-                    { title: { $regex: req.query.keyword, $options: 'i' } },
-                    { description: { $regex: req.query.keyword, $options: 'i' } },
-                ],
-            }
-            : {};
+        const { keyword, location, jobType } = req.query;
+        let query = {};
 
-        const jobs = await Job.find({ ...keyword }).populate('employer', 'name companyName');
+        // Keyword Search (Title or Description)
+        if (keyword) {
+            query.$or = [
+                { title: { $regex: keyword, $options: 'i' } },
+                { description: { $regex: keyword, $options: 'i' } },
+            ];
+        }
+
+        // Location Filter
+        if (location) {
+            query.location = { $regex: location, $options: 'i' };
+        }
+
+        // Job Type Filter (Supports multiple comma-separated values)
+        if (jobType) {
+            const types = jobType.split(',').filter(t => t.trim() !== '');
+            if (types.length > 0) {
+                // Case-insensitive match for each type
+                query.jobType = { $in: types.map(t => new RegExp(`^${t.trim()}$`, 'i')) };
+            }
+        }
+
+        const jobs = await Job.find(query).populate('employer', 'name companyName').sort({ createdAt: -1 });
+
         res.json(jobs);
     } catch (error) {
         res.status(500).json({ message: error.message });
