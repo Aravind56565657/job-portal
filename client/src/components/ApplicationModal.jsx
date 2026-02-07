@@ -39,6 +39,12 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
         setError(null);
 
         try {
+            if (!formData.email || !formData.phone) {
+                setError("Email and Phone are required.");
+                setLoading(false);
+                return;
+            }
+
             await axiosClient.post('/api/applications', {
                 jobId: job._id,
                 ...formData

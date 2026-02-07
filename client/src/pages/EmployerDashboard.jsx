@@ -8,29 +8,33 @@ const EmployerDashboard = () => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const [stats, setStats] = useState({ activeJobs: 0, totalApplicants: 0, shortlistedCandidates: 0 });
+
     useEffect(() => {
-        const fetchMyJobs = async () => {
+        const fetchDashboardData = async () => {
             try {
-                const { data } = await axiosClient.get('/api/jobs/my-jobs');
-                setJobs(data);
+                // Fetch Jobs
+                const { data: jobsData } = await axiosClient.get('/api/jobs/my-jobs');
+                setJobs(jobsData);
+
+                // Fetch Stats
+                const { data: statsData } = await axiosClient.get('/api/dashboard/employer');
+                setStats(statsData);
+
             } catch (error) {
                 console.error(error);
             } finally {
                 setLoading(false);
             }
         };
-        fetchMyJobs();
+        fetchDashboardData();
     }, []);
 
-    // Real Stats Calculation
-    const totalApplicants = Array.isArray(jobs) ? jobs.reduce((acc, job) => acc + (job.applicantCount || 0), 0) : 0;
-
-    // Mock Stats for now where real data isn't available yet
-    const stats = [
-        { label: 'Active Jobs', value: Array.isArray(jobs) ? jobs.length : 0, bg: 'bg-blue-50 text-blue-600', icon: '💼' },
-        { label: 'Total Applicants', value: totalApplicants, bg: 'bg-purple-50 text-purple-600', icon: '👥' },
-        { label: 'Profile Views', value: '128', bg: 'bg-orange-50 text-orange-600', icon: '🔥' },
-    ];
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric'
+        });
+    };
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -58,17 +62,35 @@ const EmployerDashboard = () => {
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    {stats.map((stat, idx) => (
-                        <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-gray-500 mb-1">{stat.label}</p>
-                                <h3 className="text-3xl font-bold text-gray-900">{stat.value}</h3>
-                            </div>
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl ${stat.bg}`}>
-                                {stat.icon}
-                            </div>
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-500 mb-1">Active Jobs</p>
+                            <h3 className="text-3xl font-bold text-gray-900">{stats.activeJobs || 0}</h3>
                         </div>
-                    ))}
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl bg-blue-50 text-blue-600">
+                            💼
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-500 mb-1">Total Applicants</p>
+                            <h3 className="text-3xl font-bold text-gray-900">{stats.totalApplicants || 0}</h3>
+                        </div>
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl bg-purple-50 text-purple-600">
+                            👥
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-500 mb-1">Shortlisted Candidates</p>
+                            <h3 className="text-3xl font-bold text-gray-900">{stats.shortlistedCandidates || 0}</h3>
+                        </div>
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl bg-yellow-50 text-yellow-600">
+                            ⭐
+                        </div>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

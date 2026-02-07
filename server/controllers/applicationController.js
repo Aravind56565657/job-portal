@@ -6,6 +6,7 @@ const Job = require('../models/Job');
 // @access  Private (Job Seeker)
 const applyForJob = async (req, res) => {
     try {
+        console.log("Apply Body:", req.body); // Debugging log
         const { jobId, resume, coverLetter, email, phone, portfolioLink, experience } = req.body;
 
         const job = await Job.findById(jobId);

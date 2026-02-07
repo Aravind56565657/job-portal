@@ -10,17 +10,15 @@ const JobSeekerDashboard = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchApplications = async () => {
+        const fetchDashboardData = async () => {
             try {
-                const { data } = await axiosClient.get('/api/applications/my-applications');
-                setApplications(data);
+                // Fetch Applications
+                const { data: appsData } = await axiosClient.get('/api/applications/my-applications');
+                setApplications(appsData);
 
-                // Calculate stats
-                if (Array.isArray(data)) {
-                    const appliedCount = data.length;
-                    const interviewCount = data.filter(app => app.status === 'Interview').length;
-                    setStats({ applied: appliedCount, interviews: interviewCount });
-                }
+                // Fetch Stats
+                const { data: statsData } = await axiosClient.get('/api/dashboard/seeker');
+                setStats(statsData);
 
             } catch (error) {
                 console.error(error);
@@ -28,7 +26,7 @@ const JobSeekerDashboard = () => {
                 setLoading(false);
             }
         };
-        fetchApplications();
+        fetchDashboardData();
     }, []);
 
     const StatCard = ({ title, value, icon, color }) => (
@@ -72,17 +70,17 @@ const JobSeekerDashboard = () => {
 
                 {/* Seeker Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    <StatCard title="Jobs Applied" value={stats.applied} icon="📝" color="#0ea5e9" />
-                    <StatCard title="Interviews" value={stats.interviews} icon="🤝" color="#8b5cf6" />
+                    <StatCard title="Jobs Applied" value={stats.applications || 0} icon="📝" color="#0ea5e9" />
+                    <StatCard title="Interviews Scheduled" value={stats.interviews || 0} icon="🤝" color="#8b5cf6" />
 
-                    <div className="card border-l-4 border-gray-200 bg-gray-50 opacity-50">
+                    <div className="card border-l-4 border-yellow-400">
                         <div className="flex justify-between items-start">
                             <div>
-                                <p className="text-gray-400 text-sm font-medium uppercase tracking-wide">Profile Views</p>
-                                <h3 className="text-xl font-bold text-gray-400 mt-1">Coming Soon</h3>
+                                <p className="text-gray-500 text-sm font-medium uppercase tracking-wide">Jobs Shortlisted</p>
+                                <h3 className="text-3xl font-bold text-dark-900 mt-1">{stats.shortlisted || 0}</h3>
                             </div>
-                            <div className="p-3 rounded-lg bg-gray-200 text-xl text-gray-400">
-                                👀
+                            <div className="p-3 rounded-lg bg-yellow-50 text-xl text-yellow-500">
+                                ⭐
                             </div>
                         </div>
                     </div>
