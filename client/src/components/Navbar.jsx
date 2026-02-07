@@ -6,6 +6,7 @@ const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
     const location = useLocation();
     const [scrolled, setScrolled] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     // Sticky glass effect on scroll
     useEffect(() => {
@@ -13,6 +14,11 @@ const Navbar = () => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Close menu on route change
+    useEffect(() => {
+        setIsMenuOpen(false);
+    }, [location]);
 
     const isActive = (path) => location.pathname === path ? 'text-primary-600 font-semibold bg-primary-50' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50';
 
@@ -29,17 +35,17 @@ const Navbar = () => {
                     <span className="text-3xl">🚀</span> JobPortal
                 </Link>
 
-                {/* Navigation Links */}
+                {/* Desktop Menu */}
                 <div className="hidden md:flex items-center gap-1">
                     {user ? (
                         <>
                             <Link to={getDashboardLink()} className={`px-4 py-2 rounded-full transition-all ${location.pathname.includes('/dashboard') ? 'text-primary-600 font-semibold bg-primary-50' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50'}`}>Dashboard</Link>
 
-                            {user.role === 'job_seeker' && (
+                            {user?.role === 'job_seeker' && (
                                 <Link to="/jobs" className={`px-4 py-2 rounded-full transition-all ${isActive('/jobs')}`}>Browse Jobs</Link>
                             )}
 
-                            {user.role === 'employer' && (
+                            {user?.role === 'employer' && (
                                 <>
                                     <Link to="/post-job" className={`px-4 py-2 rounded-full transition-all ${isActive('/post-job')}`}>Post Role</Link>
                                     <Link to="/employer/jobs" className={`px-4 py-2 rounded-full transition-all ${isActive('/employer/jobs')}`}>My Jobs</Link>
@@ -48,9 +54,23 @@ const Navbar = () => {
 
                             {/* User Profile Pill */}
                             <div className="ml-4 flex items-center gap-3 pl-4 border-l border-gray-200">
-                                <div className="text-right hidden lg:block">
+                                <div className="hidden lg:block text-right">
                                     <p className="text-sm font-bold text-gray-800">{user.name}</p>
-                                    <p className="text-xs text-gray-500 capitalize">{user.role.replace('_', ' ')}</p>
+                                    <p className="text-xs text-gray-500 capitalize">{user.role?.replace('_', ' ')}</p>
+                                </div>
+
+                                <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 shadow-sm flex items-center justify-center bg-gray-50">
+                                    {(user.profilePhoto || user.companyLogo) ? (
+                                        <img
+                                            src={user.companyLogo || user.profilePhoto}
+                                            alt={user.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <span className="text-lg font-bold text-primary-600">
+                                            {user.name?.charAt(0).toUpperCase()}
+                                        </span>
+                                    )}
                                 </div>
                                 <button
                                     onClick={logout}
@@ -69,7 +89,51 @@ const Navbar = () => {
                         </>
                     )}
                 </div>
+
+                {/* Mobile Menu Button */}
+                <div className="md:hidden flex items-center">
+                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-700 focus:outline-none p-2 text-2xl">
+                        {isMenuOpen ? '✕' : '☰'}
+                    </button>
+                </div>
             </div>
+
+            {/* Mobile Dropdown */}
+            {isMenuOpen && (
+                <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 animate-fade-in-down">
+                    <div className="flex flex-col p-4 space-y-2">
+                        {user ? (
+                            <>
+                                <div className="px-4 py-2 border-b border-gray-100 mb-2">
+                                    <p className="font-bold text-gray-800">{user?.name}</p>
+                                    <p className="text-xs text-gray-500 capitalize">{user.role?.replace('_', ' ')}</p>
+                                </div>
+                                <Link to={getDashboardLink()} className={`px-4 py-3 rounded-lg ${isActive(getDashboardLink())}`}>Dashboard</Link>
+
+                                {user?.role === 'job_seeker' && (
+                                    <Link to="/jobs" className={`px-4 py-3 rounded-lg ${isActive('/jobs')}`}>Browse Jobs</Link>
+                                )}
+
+                                {user?.role === 'employer' && (
+                                    <>
+                                        <Link to="/post-job" className={`px-4 py-3 rounded-lg ${isActive('/post-job')}`}>Post Role</Link>
+                                        <Link to="/employer/jobs" className={`px-4 py-3 rounded-lg ${isActive('/employer/jobs')}`}>My Jobs</Link>
+                                    </>
+                                )}
+
+                                <button onClick={logout} className="px-4 py-3 text-left text-red-600 font-medium hover:bg-red-50 rounded-lg">
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/login" className="px-4 py-3 rounded-lg hover:bg-gray-50 font-medium">Login</Link>
+                                <Link to="/register" className="px-4 py-3 rounded-lg bg-primary-600 text-white font-medium text-center shadow-lg">Get Started</Link>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
         </nav>
     );
 };

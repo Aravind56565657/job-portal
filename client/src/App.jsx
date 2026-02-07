@@ -16,6 +16,8 @@ import JobDetails from './pages/JobDetails';
 import ManageJobs from './pages/ManageJobs';
 import JobApplicants from './pages/JobApplicants';
 import MyApplications from './pages/MyApplications';
+import Onboarding from './pages/Onboarding'; // Import Onboarding
+
 
 // Helper component to redirect based on role
 const DashboardRedirect = () => {
@@ -39,6 +41,12 @@ function App() {
 
             {/* Generic Dashboard Redirect */}
             <Route path="/dashboard" element={<DashboardRedirect />} />
+
+            <Route path="/onboarding" element={
+              <ProtectedRoute>
+                <Onboarding />
+              </ProtectedRoute>
+            } />
 
             {/* Job Seeker Routes */}
             <Route

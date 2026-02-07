@@ -1,125 +1,165 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import axiosClient from '../api/axiosClient';
 
 const EmployerDashboard = () => {
     const { user } = useContext(AuthContext);
+    const [jobs, setJobs] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const StatCard = ({ title, value, icon, color }) => (
-        <div className="card border-l-4" style={{ borderColor: color }}>
-            <div className="flex justify-between items-start">
-                <div>
-                    <p className="text-gray-500 text-sm font-medium uppercase tracking-wide">{title}</p>
-                    <h3 className="text-3xl font-bold text-dark-900 mt-1">{value}</h3>
-                </div>
-                <div className={`p-3 rounded-lg bg-opacity-10 text-xl`} style={{ backgroundColor: color + '20', color: color }}>
-                    {icon}
-                </div>
-            </div>
-        </div>
-    );
+    useEffect(() => {
+        const fetchMyJobs = async () => {
+            try {
+                const { data } = await axiosClient.get('/api/jobs/my-jobs');
+                setJobs(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchMyJobs();
+    }, []);
+
+    // Real Stats Calculation
+    const totalApplicants = Array.isArray(jobs) ? jobs.reduce((acc, job) => acc + (job.applicantCount || 0), 0) : 0;
+
+    // Mock Stats for now where real data isn't available yet
+    const stats = [
+        { label: 'Active Jobs', value: Array.isArray(jobs) ? jobs.length : 0, bg: 'bg-blue-50 text-blue-600', icon: '💼' },
+        { label: 'Total Applicants', value: totalApplicants, bg: 'bg-purple-50 text-purple-600', icon: '👥' },
+        { label: 'Profile Views', value: '128', bg: 'bg-orange-50 text-orange-600', icon: '🔥' },
+    ];
+
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric'
+        });
+    };
 
     return (
-        <div className="pt-24 pb-12 px-6 bg-gray-50 min-h-screen">
-            <div className="container mx-auto max-w-6xl animate-slide-up">
+        <div className="pt-28 pb-12 px-6 bg-gray-50 min-h-screen font-sans">
+            <div className="container mx-auto max-w-6xl">
 
-                {/* Welcome Section */}
-                <div className="mb-10 flex flex-col md:flex-row justify-between items-end gap-4">
+                {/* Header Section */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
                     <div>
-                        <h1 className="text-4xl font-serif font-bold text-dark-900">
-                            Employer Dashboard
+                        <h1 className="text-3xl font-bold text-gray-900">
+                            Welcome back, {user?.name?.split(' ')[0]} 👋
                         </h1>
-                        <p className="text-gray-500 mt-2">Manage your job postings and find the best talent.</p>
+                        <p className="text-gray-500 mt-1">Here's what's happening with your job postings.</p>
                     </div>
-                    <div className="flex gap-3">
-                        <Link to="/post-job" className="btn-primary flex items-center gap-2">
-                            <span>+</span> Post New Job
-                        </Link>
-                    </div>
+                    <Link to="/post-job" className="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-gray-200 transition-all flex items-center gap-2">
+                        <span>+</span>
+                        Post New Job
+                    </Link>
                 </div>
 
-                {/* Employer Stats Grid */}
+                {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    <StatCard title="Active Jobs" value="5" icon="💼" color="#0ea5e9" />
-                    <StatCard title="Total Applicants" value="128" icon="👥" color="#8b5cf6" />
-                    <StatCard title="New Candidates" value="12" icon="🔥" color="#f43f5e" />
+                    {stats.map((stat, idx) => (
+                        <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-gray-500 mb-1">{stat.label}</p>
+                                <h3 className="text-3xl font-bold text-gray-900">{stat.value}</h3>
+                            </div>
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl ${stat.bg}`}>
+                                {stat.icon}
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
-                {/* Main Content Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                    {/* Left Column (Recent Jobs) */}
-                    <div className="lg:col-span-2 space-y-8">
-                        <div className="card">
-                            <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                                Your Recent Job Postings
-                            </h2>
-                            {/* Placeholder Data */}
+                    {/* Recent Job Postings (Left Column) */}
+                    <div className="lg:col-span-2 space-y-6">
+                        <div className="flex justify-between items-center mb-2">
+                            <h2 className="text-xl font-bold text-gray-900">Recent Job Postings</h2>
+                            <Link to="/employer/jobs" className="text-primary-600 font-semibold hover:text-primary-700 text-sm">View All</Link>
+                        </div>
+
+                        {loading ? (
+                            <div className="flex justify-center py-10">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                            </div>
+                        ) : (Array.isArray(jobs) && jobs.length > 0) ? (
                             <div className="space-y-4">
-                                {[
-                                    { id: 1, title: 'Senior Frontend Engineer', applicants: 45, status: 'Active', posted: '2 days ago' },
-                                    { id: 2, title: 'Product Manager', applicants: 28, status: 'Active', posted: '1 week ago' },
-                                    { id: 3, title: 'UX Designer', applicants: 12, status: 'Closed', posted: '2 weeks ago' },
-                                ].map((job) => (
-                                    <div key={job.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border shadow-sm text-lg">
-                                                💼
-                                            </div>
+                                {jobs.slice(0, 5).map(job => (
+                                    <div key={job._id} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-primary-100 hover:shadow-md transition-all group">
+                                        <div className="flex justify-between items-start">
                                             <div>
-                                                <h4 className="font-bold text-dark-900">{job.title}</h4>
-                                                <p className="text-sm text-gray-500">{job.posted} • {job.applicants} Applicants</p>
+                                                <h3 className="font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
+                                                    {job.title}
+                                                </h3>
+                                                <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
+                                                    <span className="flex items-center gap-1">📍 {job.location}</span>
+                                                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                                                    <span>📅 {formatDate(job.createdAt)}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="flex items-center gap-3">
-                                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${job.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700'
-                                                }`}>
-                                                {job.status}
+                                            <span className="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-full uppercase tracking-wide">
+                                                Active
                                             </span>
-                                            <Link to={`/job/${job.id}/applicants`} className="text-primary-600 hover:text-primary-800 text-sm font-medium">
-                                                Manage
+                                        </div>
+
+                                        <div className="mt-4 pt-4 border-t border-gray-50 flex gap-4">
+                                            <Link to={`/job/${job._id}/applicants`} className="text-sm font-semibold text-gray-600 hover:text-primary-600 flex items-center gap-1">
+                                                👥 View Applicants
+                                            </Link>
+                                            <Link to={`/employer/jobs`} className="text-sm font-semibold text-gray-600 hover:text-primary-600 flex items-center gap-1">
+                                                ✏️ Manage
                                             </Link>
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                            <div className="mt-6 text-center">
-                                <Link to="/employer/jobs" className="text-primary-600 font-semibold hover:underline">
-                                    View All Jobs
+                        ) : (
+                            <div className="bg-white p-10 rounded-2xl border border-dashed border-gray-300 text-center">
+                                <div className="text-4xl mb-4">📝</div>
+                                <h3 className="text-lg font-bold text-gray-900 mb-2">No jobs posted yet</h3>
+                                <p className="text-gray-500 mb-6">Create your first job posting to start finding talent.</p>
+                                <Link to="/post-job" className="text-primary-600 font-bold hover:underline">Create a Job Posting</Link>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Company Profile Widget (Right Column) */}
+                    <div className="space-y-6">
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h2 className="text-lg font-bold text-gray-900 mb-6">Company Profile</h2>
+
+                            <div className="flex flex-col items-center text-center">
+                                <div className="w-20 h-20 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-3xl mb-4 overflow-hidden">
+                                    {user?.companyLogo || user?.profilePhoto ? (
+                                        <img src={user.companyLogo || user.profilePhoto} alt="Logo" className="w-full h-full object-contain" />
+                                    ) : (
+                                        '🏢'
+                                    )}
+                                </div>
+                                <h3 className="font-bold text-gray-900 text-lg">
+                                    {user?.companyName || user?.name || "Company Name"}
+                                </h3>
+                                <a href={user?.companyWebsite || '#'} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-500 hover:text-primary-600 mt-1">
+                                    {user?.companyWebsite || "Add website"}
+                                </a>
+
+                                <Link to="/onboarding" className="mt-6 w-full py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold rounded-lg text-sm transition-colors">
+                                    Edit Company Profile
                                 </Link>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Right Column (Profile & Insights) */}
-                    <div className="space-y-8">
-                        <div className="card bg-gradient-to-br from-dark-800 to-dark-900 text-white">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 p-1">
-                                    <div className="w-full h-full bg-dark-900 rounded-full flex items-center justify-center font-bold text-2xl">
-                                        {user?.name?.charAt(0)}
-                                    </div>
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-lg">{user?.name}</h3>
-                                    <p className="text-gray-400 text-sm">{user?.email}</p>
-                                </div>
-                            </div>
-                            <div className="space-y-3">
-                                <div className="flex justify-between text-sm border-b border-gray-700 pb-2">
-                                    <span className="text-gray-400">Account</span>
-                                    <span className="font-medium">Employer</span>
-                                </div>
-                                <div className="flex justify-between text-sm border-b border-gray-700 pb-2">
-                                    <span className="text-gray-400">Company Profile</span>
-                                    <span className="font-medium text-green-400">Verified</span>
-                                </div>
-                            </div>
-                            <button className="w-full mt-6 bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg transition-colors text-sm font-medium">
-                                Edit Company Profile
-                            </button>
+                        {/* Quick Tips Card */}
+                        <div className="bg-gradient-to-br from-primary-600 to-primary-800 p-6 rounded-2xl text-white shadow-lg">
+                            <h3 className="font-bold text-lg mb-2">✨ Hiring Tip</h3>
+                            <p className="text-primary-100 text-sm leading-relaxed">
+                                Detailed job descriptions attract 3x more relevant candidates. Make sure to list specific requirements and perks!
+                            </p>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

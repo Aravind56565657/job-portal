@@ -37,6 +37,10 @@ const registerUser = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                isProfileCompleted: user.isProfileCompleted,
+                profilePhoto: user.profilePhoto,
+                companyLogo: user.companyLogo,
+                companyName: user.companyName,
                 token: generateToken(user._id),
             });
         } else {
@@ -62,6 +66,10 @@ const loginUser = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                isProfileCompleted: user.isProfileCompleted,
+                profilePhoto: user.profilePhoto,
+                companyLogo: user.companyLogo,
+                companyName: user.companyName,
                 token: generateToken(user._id),
             });
         } else {
@@ -94,6 +102,10 @@ const googleLogin = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                isProfileCompleted: user.isProfileCompleted,
+                profilePhoto: user.profilePhoto,
+                companyLogo: user.companyLogo,
+                companyName: user.companyName,
                 token: generateToken(user._id),
             });
         } else {
@@ -106,6 +118,7 @@ const googleLogin = async (req, res) => {
                 email,
                 password: randomPassword,
                 role: 'job_seeker', // Default role, user can change later if we add that flow
+                isProfileCompleted: false,
             });
 
             res.status(201).json({
@@ -113,6 +126,10 @@ const googleLogin = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                isProfileCompleted: user.isProfileCompleted,
+                profilePhoto: user.profilePhoto,
+                companyLogo: user.companyLogo,
+                companyName: user.companyName,
                 token: generateToken(user._id),
             });
         }
@@ -135,6 +152,27 @@ const getUserProfile = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                isProfileCompleted: user.isProfileCompleted,
+                // Return all profile fields
+                profilePhoto: user.profilePhoto,
+                companyLogo: user.companyLogo,
+                phone: user.phone,
+                location: user.location,
+                bio: user.bio,
+                headline: user.headline,
+                companyName: user.companyName,
+                companyWebsite: user.companyWebsite,
+                socialLinks: user.socialLinks,
+                jobPreferences: user.jobPreferences,
+                education: user.education,
+                experience: user.experience,
+                projects: user.projects,
+                certifications: user.certifications,
+                skills: user.skills,
+                softSkills: user.softSkills,
+                languages: user.languages,
+                resume: user.resume,
+                coverLetter: user.coverLetter
             });
         } else {
             res.status(404).json({ message: 'User not found' });

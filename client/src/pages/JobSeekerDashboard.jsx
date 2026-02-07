@@ -1,9 +1,35 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import axiosClient from '../api/axiosClient';
 
 const JobSeekerDashboard = () => {
     const { user } = useContext(AuthContext);
+    const [applications, setApplications] = useState([]);
+    const [stats, setStats] = useState({ applied: 0, interviews: 0 });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchApplications = async () => {
+            try {
+                const { data } = await axiosClient.get('/api/applications/my-applications');
+                setApplications(data);
+
+                // Calculate stats
+                if (Array.isArray(data)) {
+                    const appliedCount = data.length;
+                    const interviewCount = data.filter(app => app.status === 'Interview').length;
+                    setStats({ applied: appliedCount, interviews: interviewCount });
+                }
+
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchApplications();
+    }, []);
 
     const StatCard = ({ title, value, icon, color }) => (
         <div className="card border-l-4" style={{ borderColor: color }}>
@@ -18,6 +44,12 @@ const JobSeekerDashboard = () => {
             </div>
         </div>
     );
+
+    // Helper to format date
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+    };
 
     return (
         <div className="pt-24 pb-12 px-6 bg-gray-50 min-h-screen">
@@ -40,9 +72,20 @@ const JobSeekerDashboard = () => {
 
                 {/* Seeker Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    <StatCard title="Jobs Applied" value="12" icon="📝" color="#0ea5e9" />
-                    <StatCard title="Interviews" value="3" icon="🤝" color="#8b5cf6" />
-                    <StatCard title="Profile Views" value="48" icon="👀" color="#14b8a6" />
+                    <StatCard title="Jobs Applied" value={stats.applied} icon="📝" color="#0ea5e9" />
+                    <StatCard title="Interviews" value={stats.interviews} icon="🤝" color="#8b5cf6" />
+
+                    <div className="card border-l-4 border-gray-200 bg-gray-50 opacity-50">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-gray-400 text-sm font-medium uppercase tracking-wide">Profile Views</p>
+                                <h3 className="text-xl font-bold text-gray-400 mt-1">Coming Soon</h3>
+                            </div>
+                            <div className="p-3 rounded-lg bg-gray-200 text-xl text-gray-400">
+                                👀
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Main Content Grid */}
@@ -54,37 +97,41 @@ const JobSeekerDashboard = () => {
                             <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
                                 Recent Applications
                             </h2>
-                            {/* Placeholder Data - Ideally fetch from API */}
-                            <div className="space-y-4">
-                                {[
-                                    { id: 1, company: 'Google Inc.', role: 'Frontend Developer', status: 'Interview', date: '2 days ago' },
-                                    { id: 2, company: 'Netflix', role: 'UI Engineer', status: 'Applied', date: '5 days ago' },
-                                    { id: 3, company: 'Spotify', role: 'React Developer', status: 'Rejected', date: '1 week ago' },
-                                ].map((app) => (
-                                    <div key={app.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border shadow-sm text-lg">
-                                                🏢
+
+                            {loading ? (
+                                <div className="text-center py-10">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+                                </div>
+                            ) : (Array.isArray(applications) && applications.length > 0) ? (
+                                <div className="space-y-4">
+                                    {applications.map((app) => (
+                                        <div key={app._id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition gap-4">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border shadow-sm text-lg flex-shrink-0">
+                                                    🏢
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-dark-900">{app.job?.title || 'Unknown Role'}</h4>
+                                                    <p className="text-sm text-gray-500">{app.job?.companyName || 'Company'} • {formatDate(app.createdAt)}</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h4 className="font-bold text-dark-900">{app.role}</h4>
-                                                <p className="text-sm text-gray-500">{app.company} • {app.date}</p>
-                                            </div>
-                                        </div>
-                                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${app.status === 'Interview' ? 'bg-blue-100 text-blue-700' :
+                                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${app.status === 'Interview' ? 'bg-blue-100 text-blue-700' :
                                                 app.status === 'Applied' ? 'bg-green-100 text-green-700' :
                                                     'bg-red-100 text-red-700'
-                                            }`}>
-                                            {app.status}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="mt-6 text-center">
-                                <Link to="/my-applications" className="text-primary-600 font-semibold hover:underline">
-                                    View All Applications
-                                </Link>
-                            </div>
+                                                }`}>
+                                                {app.status || 'Applied'}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                                    <p className="text-gray-500 mb-4">You haven't applied to any jobs yet.</p>
+                                    <Link to="/jobs" className="btn-primary inline-block">
+                                        Find a Job
+                                    </Link>
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -93,8 +140,12 @@ const JobSeekerDashboard = () => {
                         <div className="card bg-gradient-to-br from-dark-800 to-dark-900 text-white">
                             <div className="flex items-center gap-4 mb-6">
                                 <div className="w-16 h-16 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 p-1">
-                                    <div className="w-full h-full bg-dark-900 rounded-full flex items-center justify-center font-bold text-2xl">
-                                        {user?.name?.charAt(0)}
+                                    <div className="w-full h-full bg-dark-900 rounded-full flex items-center justify-center font-bold text-2xl overflow-hidden">
+                                        {user?.profilePhoto ? (
+                                            <img src={user.profilePhoto} alt={user?.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            user?.name?.charAt(0)
+                                        )}
                                     </div>
                                 </div>
                                 <div>
@@ -112,9 +163,9 @@ const JobSeekerDashboard = () => {
                                     <span className="font-medium">Feb 2026</span>
                                 </div>
                             </div>
-                            <button className="w-full mt-6 bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg transition-colors text-sm font-medium">
+                            <Link to="/onboarding" className="block w-full mt-6 bg-white/10 hover:bg-white/20 text-center text-white py-2 rounded-lg transition-colors text-sm font-medium">
                                 Edit Profile
-                            </button>
+                            </Link>
                         </div>
 
                         {/* Recommended Jobs Teaser */}
