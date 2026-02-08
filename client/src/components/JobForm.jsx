@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosClient from '../api/axiosClient';
 
-const JobForm = ({ initialData = {}, isEdit = false }) => {
+const JobForm = ({ initialData, isEdit = false }) => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -15,12 +15,12 @@ const JobForm = ({ initialData = {}, isEdit = false }) => {
         description: '',
         responsibilities: [''],
         qualifications: [''],
-        ...initialData
+        ...(initialData || {})
     });
 
-    // If initialData has string arrays but we want to ensure they are arrays (legacy handling)
+    // Handle updates to initialData (only if provided and meaningful)
     useEffect(() => {
-        if (initialData) {
+        if (initialData && Object.keys(initialData).length > 0) {
             setFormData(prev => ({
                 ...prev,
                 ...initialData,
