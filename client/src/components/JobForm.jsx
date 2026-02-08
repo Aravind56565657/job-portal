@@ -55,6 +55,20 @@ const JobForm = ({ initialData, isEdit = false }) => {
         setFormData({ ...formData, [field]: newArray.length ? newArray : [''] });
     };
 
+    const handlePaste = (e, field, index) => {
+        const text = e.clipboardData.getData('text');
+        if (text.includes('\n')) {
+            e.preventDefault();
+            const newItems = text.split('\n').map(item => item.trim()).filter(item => item !== '');
+            if (newItems.length > 0) {
+                const currentArray = [...formData[field]];
+                // Insert new items at current index, replacing the current item
+                currentArray.splice(index, 1, ...newItems);
+                setFormData({ ...formData, [field]: currentArray });
+            }
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -189,6 +203,7 @@ const JobForm = ({ initialData, isEdit = false }) => {
                                 type="text"
                                 value={item}
                                 onChange={(e) => handleArrayChange('responsibilities', idx, e.target.value)}
+                                onPaste={(e) => handlePaste(e, 'responsibilities', idx)}
                                 className="input-field py-2"
                                 placeholder="Add a responsibility..."
                                 required={idx === 0} // Only first is required
@@ -219,6 +234,7 @@ const JobForm = ({ initialData, isEdit = false }) => {
                                 type="text"
                                 value={item}
                                 onChange={(e) => handleArrayChange('qualifications', idx, e.target.value)}
+                                onPaste={(e) => handlePaste(e, 'qualifications', idx)}
                                 className="input-field py-2"
                                 placeholder="Add a qualification..."
                                 required={idx === 0}
