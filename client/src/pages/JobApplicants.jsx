@@ -69,14 +69,14 @@ const JobApplicants = () => {
                                 <div>
                                     <div className="flex justify-between items-start mb-4">
                                         <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-500 to-purple-600 text-white flex items-center justify-center font-bold text-xl shadow-md">
-                                            {app.applicant.name.charAt(0)}
+                                            {app.applicant?.name?.charAt(0) || '?'}
                                         </div>
                                         <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${getStatusColor(app.status)}`}>
                                             {app.status}
                                         </span>
                                     </div>
 
-                                    <h3 className="text-lg font-bold text-gray-900 mb-1">{app.applicant.name}</h3>
+                                    <h3 className="text-lg font-bold text-gray-900 mb-1">{app.applicant?.name || 'Unknown Applicant'}</h3>
                                     <div className="flex flex-wrap gap-2 mb-3 text-xs font-semibold">
                                         <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded">📧 {app.email}</span>
                                         <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded">📱 {app.phone}</span>
