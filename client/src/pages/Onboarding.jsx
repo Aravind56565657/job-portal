@@ -129,7 +129,7 @@ const Onboarding = () => {
 
         const uploadData = new FormData();
         uploadData.append('file', file);
-        uploadData.append('type', 'auto');
+        uploadData.append('type', fieldName === 'resume' ? 'resume' : 'auto');
 
         try {
             const res = await axiosClient.post('/api/users/upload', uploadData, {

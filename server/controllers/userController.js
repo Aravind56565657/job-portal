@@ -103,8 +103,11 @@ const uploadFile = async (req, res) => {
 
         const type = req.body.type || 'auto'; // 'image' or 'raw' (for pdf)
 
+        // Force 'raw' for PDFs to avoid corruption/image conversion issues
+        const resourceType = (type === 'resume' || req.file.mimetype === 'application/pdf') ? 'raw' : 'auto';
+
         const uploadResponse = await cloudinary.uploader.upload(dataURI, {
-            resource_type: type === 'resume' ? 'raw' : 'auto',
+            resource_type: resourceType,
             folder: 'job-portal-uploads',
             public_id: `${req.user.id}_${Date.now()}`,
             use_filename: true
