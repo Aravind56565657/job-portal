@@ -98,24 +98,39 @@ const uploadFile = async (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        // Convert buffer to base64 for Cloudinary
-        const b64 = Buffer.from(req.file.buffer).toString('base64');
-        let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-
         const type = req.body.type || 'auto'; // 'image' or 'raw' (for pdf)
+        const isPdf = req.file.mimetype === 'application/pdf';
 
         // Force 'raw' for PDFs to avoid corruption/image conversion issues
-        const resourceType = (type === 'resume' || req.file.mimetype === 'application/pdf') ? 'raw' : 'auto';
+        const resourceType = (type === 'resume' || isPdf) ? 'raw' : 'auto';
 
+        // Generate public_id with extension for raw files to ensure correct content-type delivery
         const fileExtension = path.extname(req.file.originalname);
-        const publicId = `${req.user.id}_${Date.now()}${fileExtension}`;
+        const publicId = `${req.user.id}_${Date.now()}${resourceType === 'raw' ? fileExtension : ''}`;
 
-        const uploadResponse = await cloudinary.uploader.upload(dataURI, {
-            resource_type: resourceType,
-            folder: 'job-portal-uploads',
-            public_id: publicId,
-            use_filename: true
-        });
+        // Use upload_stream for better handling of binary files (like PDFs)
+        const streamUpload = (buffer) => {
+            return new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    {
+                        resource_type: resourceType,
+                        folder: 'job-portal-uploads',
+                        public_id: publicId,
+                        use_filename: true
+                    },
+                    (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    }
+                );
+                stream.end(buffer);
+            });
+        };
+
+        const uploadResponse = await streamUpload(req.file.buffer);
 
         res.json({
             url: uploadResponse.secure_url,
