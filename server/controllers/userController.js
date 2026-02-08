@@ -1,3 +1,4 @@
+const path = require('path');
 const User = require('../models/User');
 const cloudinary = require('../config/cloudinary');
 
@@ -106,10 +107,13 @@ const uploadFile = async (req, res) => {
         // Force 'raw' for PDFs to avoid corruption/image conversion issues
         const resourceType = (type === 'resume' || req.file.mimetype === 'application/pdf') ? 'raw' : 'auto';
 
+        const fileExtension = path.extname(req.file.originalname);
+        const publicId = `${req.user.id}_${Date.now()}${fileExtension}`;
+
         const uploadResponse = await cloudinary.uploader.upload(dataURI, {
             resource_type: resourceType,
             folder: 'job-portal-uploads',
-            public_id: `${req.user.id}_${Date.now()}`,
+            public_id: publicId,
             use_filename: true
         });
 
