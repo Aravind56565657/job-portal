@@ -121,7 +121,7 @@ const JobApplicants = () => {
                                     <div className="flex gap-2">
                                         {app.resume && (
                                             <a href={app.resume} target="_blank" rel="noopener noreferrer" className="flex-1 py-2 text-center rounded-lg border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 text-sm flex items-center justify-center gap-1">
-                                                📄 Resume
+                                                👁️ View Resume
                                             </a>
                                         )}
                                         {app.portfolioLink && (
