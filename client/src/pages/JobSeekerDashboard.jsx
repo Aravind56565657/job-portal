@@ -162,7 +162,7 @@ const JobSeekerDashboard = () => {
                                 </div>
                             </div>
                             <Link to="/onboarding" className="block w-full mt-6 bg-white/10 hover:bg-white/20 text-center text-white py-2 rounded-lg transition-colors text-sm font-medium">
-                                Edit Profile
+                                Edit Profile & Resume
                             </Link>
                         </div>
 

@@ -33,6 +33,28 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleFileUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const uploadData = new FormData();
+        uploadData.append('file', file);
+        uploadData.append('type', 'resume');
+
+        setLoading(true); // temporary loading state for upload
+        try {
+            const res = await axiosClient.post('/api/users/upload', uploadData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            setFormData(prev => ({ ...prev, resume: res.data.url }));
+        } catch (error) {
+            console.error("Upload failed", error);
+            setError("Failed to upload resume. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -139,16 +161,75 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
                             </div>
                         </div>
 
-                        {/* Section: Resume Alert */}
-                        <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-center gap-3">
-                            <span className="text-2xl">📄</span>
-                            <div>
-                                <p className="text-sm text-blue-800 font-semibold">
-                                    We will include your profile resume automatically.
-                                </p>
-                                <p className="text-xs text-blue-600">
-                                    Ensure your profile resume is up to date in settings.
-                                </p>
+                        {/* Section: Resume Selection */}
+                        <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
+                            <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                📄 Resume <span className="text-red-500">*</span>
+                            </h3>
+
+                            <div className="space-y-3">
+                                {/* Option 1: Use Profile Resume */}
+                                {user?.resume && (
+                                    <label className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200 cursor-pointer hover:border-blue-300 transition-colors">
+                                        <input
+                                            type="radio"
+                                            name="resumeOption"
+                                            checked={formData.resume === user.resume}
+                                            onChange={() => setFormData({ ...formData, resume: user.resume })}
+                                            className="mt-1"
+                                        />
+                                        <div className="flex-1">
+                                            <span className="font-semibold text-gray-700 block">Use Profile Resume</span>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <a
+                                                    href={user.resume}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    👁️ View Current Resume
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </label>
+                                )}
+
+                                {/* Option 2: Upload New Resume */}
+                                <label className={`flex items-start gap-3 p-3 bg-white rounded-lg border cursor-pointer transition-colors ${formData.resume !== user?.resume ? 'border-blue-500 ring-1 ring-blue-500' : 'border-gray-200 hover:border-blue-300'}`}>
+                                    <input
+                                        type="radio"
+                                        name="resumeOption"
+                                        checked={formData.resume !== user?.resume || !user?.resume}
+                                        onChange={() => {
+                                            // Don't clear immediately, just select this option to show upload
+                                            if (formData.resume === user?.resume) setFormData({ ...formData, resume: '' });
+                                        }}
+                                        className="mt-1"
+                                    />
+                                    <div className="w-full">
+                                        <span className="font-semibold text-gray-700 block mb-2">Upload Different Resume</span>
+                                        {(formData.resume !== user?.resume || !user?.resume) && (
+                                            <input
+                                                type="file"
+                                                accept=".pdf,.doc,.docx"
+                                                onChange={handleFileUpload}
+                                                className="block w-full text-sm text-gray-500
+                                                    file:mr-4 file:py-2 file:px-4
+                                                    file:rounded-full file:border-0
+                                                    file:text-xs file:font-semibold
+                                                    file:bg-blue-50 file:text-blue-700
+                                                    hover:file:bg-blue-100
+                                                "
+                                            />
+                                        )}
+                                        {formData.resume && formData.resume !== user?.resume && (
+                                            <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
+                                                ✓ New resume uploaded successfully!
+                                            </p>
+                                        )}
+                                    </div>
+                                </label>
                             </div>
                         </div>
 
