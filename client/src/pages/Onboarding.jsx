@@ -586,9 +586,20 @@ const Onboarding = () => {
                                                 <input type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={(e) => handleFileUpload(e, 'resume')} />
 
                                                 {formData.resume ? (
-                                                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                                        Resume Uploaded Successfully
+                                                    <div className="flex flex-col items-center gap-2">
+                                                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                                            Resume Uploaded Successfully
+                                                        </div>
+                                                        <a
+                                                            href={formData.resume}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-primary-600 text-sm font-semibold hover:underline flex items-center gap-1"
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+                                                            👁️ View Uploaded Resume
+                                                        </a>
                                                     </div>
                                                 ) : (
                                                     <span className="text-sm text-primary-600 font-bold underline decoration-2 underline-offset-2">Browse Files</span>
