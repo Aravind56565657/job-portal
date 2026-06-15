@@ -21,7 +21,7 @@
     "provider": null
   },
   "buildCommand": "npm install",
-  "startCommand": "unknown",
+  "startCommand": "bun render-server.js",
   "envRequired": [
     "CLOUDINARY_API_KEY",
     "CLOUDINARY_API_SECRET",
