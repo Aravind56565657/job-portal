@@ -4,16 +4,16 @@
   "lastDeployment": {
     "deploymentId": "srv-d809und0lvsc738h5r2g",
     "platform": "render_vercel",
-    "commit": "ee3acff786afb42af823dce2a121bf732a48d243",
+    "commit": "aecc8b1634dfd6045d42968a8c8e10391c8456e0",
     "url": "https://job-portal-omega-liart.vercel.app",
     "status": "success",
-    "deployedAt": "2026-06-15T19:45:52.917Z"
+    "deployedAt": "2026-06-15T19:50:38.546Z"
   },
   "lastSuccessfulDeployment": {
     "deploymentId": "srv-d809und0lvsc738h5r2g",
     "platform": "render_vercel",
-    "commit": "ee3acff786afb42af823dce2a121bf732a48d243",
+    "commit": "aecc8b1634dfd6045d42968a8c8e10391c8456e0",
     "url": "https://job-portal-omega-liart.vercel.app",
-    "deployedAt": "2026-06-15T19:45:52.917Z"
+    "deployedAt": "2026-06-15T19:50:38.546Z"
   }
 }
