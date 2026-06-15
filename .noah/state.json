@@ -2,18 +2,18 @@
   "generatedBy": "Noah-AI",
   "schema": 1,
   "lastDeployment": {
-    "deploymentId": "srv-d850ikp9rddc739vjog0",
+    "deploymentId": "srv-d80atbf7f7vs73cn4hk0",
     "platform": "render_vercel",
-    "commit": "206e3e77c3534beeeaf6c30c80e323f17776876d",
-    "url": "https://job-portal-79ms6hgk6-aravindkumar23567-8684s-projects.vercel.app",
+    "commit": "76d73502280a6188b848142067d6dd103276b2bb",
+    "url": "https://job-portal-gilt-ten-98.vercel.app",
     "status": "success",
-    "deployedAt": "2026-06-15T18:17:27.380Z"
+    "deployedAt": "2026-06-15T18:54:04.271Z"
   },
   "lastSuccessfulDeployment": {
-    "deploymentId": "srv-d850ikp9rddc739vjog0",
+    "deploymentId": "srv-d80atbf7f7vs73cn4hk0",
     "platform": "render_vercel",
-    "commit": "206e3e77c3534beeeaf6c30c80e323f17776876d",
-    "url": "https://job-portal-79ms6hgk6-aravindkumar23567-8684s-projects.vercel.app",
-    "deployedAt": "2026-06-15T18:17:27.380Z"
+    "commit": "76d73502280a6188b848142067d6dd103276b2bb",
+    "url": "https://job-portal-gilt-ten-98.vercel.app",
+    "deployedAt": "2026-06-15T18:54:04.271Z"
   }
 }
