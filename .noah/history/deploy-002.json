@@ -1,0 +1,13 @@
+{
+  "deploymentId": "srv-d80atbf7f7vs73cn4hk0",
+  "sequence": 2,
+  "platform": "render_vercel",
+  "strategy": "D",
+  "database": null,
+  "status": "success",
+  "commit": "76d73502280a6188b848142067d6dd103276b2bb",
+  "deploymentUrl": "https://job-portal-gilt-ten-98.vercel.app",
+  "durationMs": 80270,
+  "generatedFiles": [],
+  "createdAt": "2026-06-15T18:54:04.271Z"
+}
