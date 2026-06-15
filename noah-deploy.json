@@ -1,0 +1,35 @@
+{
+  "generatedBy": "Noah-AI",
+  "schema": 2,
+  "project": {
+    "name": null,
+    "language": "JavaScript",
+    "appType": "monorepo"
+  },
+  "platform": "render_vercel",
+  "strategy": "D",
+  "tier": "free",
+  "frontend": {
+    "framework": "Unknown",
+    "root": "client"
+  },
+  "backend": {
+    "framework": "node",
+    "root": "server"
+  },
+  "database": {
+    "provider": null
+  },
+  "buildCommand": "npm install",
+  "startCommand": "unknown",
+  "envRequired": [
+    "CLOUDINARY_API_KEY",
+    "CLOUDINARY_API_SECRET",
+    "CLOUDINARY_CLOUD_NAME",
+    "FRONTEND_URL",
+    "GOOGLE_CLIENT_ID",
+    "JWT_SECRET",
+    "MONGO_URI"
+  ],
+  "generatedFiles": []
+}
