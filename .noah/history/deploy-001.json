@@ -1,0 +1,13 @@
+{
+  "deploymentId": "srv-d850ikp9rddc739vjog0",
+  "sequence": 1,
+  "platform": "render_vercel",
+  "strategy": "D",
+  "database": null,
+  "status": "success",
+  "commit": "206e3e77c3534beeeaf6c30c80e323f17776876d",
+  "deploymentUrl": "https://job-portal-79ms6hgk6-aravindkumar23567-8684s-projects.vercel.app",
+  "durationMs": 71273,
+  "generatedFiles": [],
+  "createdAt": "2026-06-15T18:17:27.380Z"
+}
