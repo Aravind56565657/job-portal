@@ -1,0 +1,13 @@
+{
+  "deploymentId": "srv-d8oi6jh194ac73c1dvj0",
+  "sequence": 7,
+  "platform": "render_vercel",
+  "strategy": "D",
+  "database": null,
+  "status": "failed",
+  "commit": "ba04588b375a1101f2fe899e045f0eb8cda41137",
+  "deploymentUrl": "https://job-portal-backend-13na.onrender.com",
+  "durationMs": 64318,
+  "generatedFiles": [],
+  "createdAt": "2026-06-16T10:21:00.480Z"
+}
