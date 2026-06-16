@@ -2,18 +2,18 @@
   "generatedBy": "Noah-AI",
   "schema": 1,
   "lastDeployment": {
-    "deploymentId": "srv-d8oi6jh194ac73c1dvj0",
+    "deploymentId": "srv-d8oij8dckfvc73fqf6t0",
     "platform": "render_vercel",
-    "commit": "ba04588b375a1101f2fe899e045f0eb8cda41137",
-    "url": "https://job-portal-backend-13na.onrender.com",
-    "status": "failed",
-    "deployedAt": "2026-06-16T10:21:00.480Z"
+    "commit": "87647fad926fbcf0f2558d4a5c2fd1156b8bc699",
+    "url": "https://job-portal-eta-flame.vercel.app",
+    "status": "success",
+    "deployedAt": "2026-06-16T10:48:22.993Z"
   },
   "lastSuccessfulDeployment": {
-    "deploymentId": "srv-d809und0lvsc738h5r2g",
+    "deploymentId": "srv-d8oij8dckfvc73fqf6t0",
     "platform": "render_vercel",
-    "commit": "aecc8b1634dfd6045d42968a8c8e10391c8456e0",
-    "url": "https://job-portal-omega-liart.vercel.app",
-    "deployedAt": "2026-06-15T19:50:38.546Z"
+    "commit": "87647fad926fbcf0f2558d4a5c2fd1156b8bc699",
+    "url": "https://job-portal-eta-flame.vercel.app",
+    "deployedAt": "2026-06-16T10:48:22.993Z"
   }
 }
