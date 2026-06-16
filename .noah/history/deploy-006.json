@@ -1,0 +1,13 @@
+{
+  "deploymentId": "srv-d809tdd0lvsc738h4f30",
+  "sequence": 6,
+  "platform": "render_vercel",
+  "strategy": "D",
+  "database": null,
+  "status": "failed",
+  "commit": "0ad8abf81cb0d138b35c9d845e3003be2f40324e",
+  "deploymentUrl": "https://job-portal-two-khaki.vercel.app",
+  "durationMs": 79594,
+  "generatedFiles": [],
+  "createdAt": "2026-06-16T09:47:13.203Z"
+}
