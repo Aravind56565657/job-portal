@@ -2,12 +2,12 @@
   "generatedBy": "Noah-AI",
   "schema": 1,
   "lastDeployment": {
-    "deploymentId": "srv-d809tdd0lvsc738h4f30",
+    "deploymentId": "srv-d8oi6jh194ac73c1dvj0",
     "platform": "render_vercel",
-    "commit": "0ad8abf81cb0d138b35c9d845e3003be2f40324e",
-    "url": "https://job-portal-two-khaki.vercel.app",
+    "commit": "ba04588b375a1101f2fe899e045f0eb8cda41137",
+    "url": "https://job-portal-backend-13na.onrender.com",
     "status": "failed",
-    "deployedAt": "2026-06-16T09:47:13.203Z"
+    "deployedAt": "2026-06-16T10:21:00.480Z"
   },
   "lastSuccessfulDeployment": {
     "deploymentId": "srv-d809und0lvsc738h5r2g",
