@@ -2,12 +2,12 @@
   "generatedBy": "Noah-AI",
   "schema": 1,
   "lastDeployment": {
-    "deploymentId": "srv-d809und0lvsc738h5r2g",
+    "deploymentId": "srv-d809tdd0lvsc738h4f30",
     "platform": "render_vercel",
-    "commit": "aecc8b1634dfd6045d42968a8c8e10391c8456e0",
-    "url": "https://job-portal-omega-liart.vercel.app",
-    "status": "success",
-    "deployedAt": "2026-06-15T19:50:38.546Z"
+    "commit": "0ad8abf81cb0d138b35c9d845e3003be2f40324e",
+    "url": "https://job-portal-two-khaki.vercel.app",
+    "status": "failed",
+    "deployedAt": "2026-06-16T09:47:13.203Z"
   },
   "lastSuccessfulDeployment": {
     "deploymentId": "srv-d809und0lvsc738h5r2g",
