@@ -4,16 +4,16 @@
   "lastDeployment": {
     "deploymentId": "srv-d8oij8dckfvc73fqf6t0",
     "platform": "render_vercel",
-    "commit": "87647fad926fbcf0f2558d4a5c2fd1156b8bc699",
+    "commit": "e057c9cb87091d2544d66f4c38ff4e3c74f54b46",
     "url": "https://job-portal-eta-flame.vercel.app",
     "status": "success",
-    "deployedAt": "2026-06-16T10:48:22.993Z"
+    "deployedAt": "2026-06-17T10:55:27.060Z"
   },
   "lastSuccessfulDeployment": {
     "deploymentId": "srv-d8oij8dckfvc73fqf6t0",
     "platform": "render_vercel",
-    "commit": "87647fad926fbcf0f2558d4a5c2fd1156b8bc699",
+    "commit": "e057c9cb87091d2544d66f4c38ff4e3c74f54b46",
     "url": "https://job-portal-eta-flame.vercel.app",
-    "deployedAt": "2026-06-16T10:48:22.993Z"
+    "deployedAt": "2026-06-17T10:55:27.060Z"
   }
 }
