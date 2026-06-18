@@ -1,0 +1,13 @@
+{
+  "deploymentId": "srv-d8q2cl67r5hc73ejj960",
+  "sequence": 11,
+  "platform": "render_vercel",
+  "strategy": "D",
+  "database": null,
+  "status": "failed",
+  "commit": "f7bb825e455e6f1af679bbef6663ed1cb8b41607",
+  "deploymentUrl": "https://job-portal-six-beta.vercel.app",
+  "durationMs": 74457,
+  "generatedFiles": [],
+  "createdAt": "2026-06-18T17:10:51.694Z"
+}
