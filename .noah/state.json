@@ -2,12 +2,12 @@
   "generatedBy": "Noah-AI",
   "schema": 1,
   "lastDeployment": {
-    "deploymentId": "srv-d8oij8dckfvc73fqf6t0",
+    "deploymentId": "srv-d8q2cl67r5hc73ejj960",
     "platform": "render_vercel",
-    "commit": "a7057df63aa0de4a87812aea8761d495cd1ff8fd",
-    "url": "https://job-portal-eta-flame.vercel.app",
-    "status": "success",
-    "deployedAt": "2026-06-18T13:16:55.529Z"
+    "commit": "f7bb825e455e6f1af679bbef6663ed1cb8b41607",
+    "url": "https://job-portal-six-beta.vercel.app",
+    "status": "failed",
+    "deployedAt": "2026-06-18T17:10:51.694Z"
   },
   "lastSuccessfulDeployment": {
     "deploymentId": "srv-d8oij8dckfvc73fqf6t0",
