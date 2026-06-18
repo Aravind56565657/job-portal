@@ -2,20 +2,20 @@
   "generatedBy": "Noah-AI",
   "schema": 2,
   "project": {
-    "name": null,
+    "name": "Unnamed project",
     "language": "JavaScript",
     "appType": "monorepo"
   },
   "platform": "render_vercel",
-  "strategy": "D",
+  "strategy": "C",
   "tier": "free",
   "frontend": {
     "framework": "Unknown",
-    "root": "client"
+    "root": null
   },
   "backend": {
-    "framework": "node",
-    "root": "server"
+    "framework": "Unknown",
+    "root": null
   },
   "database": {
     "provider": null
