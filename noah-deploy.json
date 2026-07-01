@@ -18,7 +18,7 @@
     "root": "server"
   },
   "database": {
-    "provider": null
+    "provider": "atlas"
   },
   "buildCommand": "npm install",
   "startCommand": "bun render-server.js",
