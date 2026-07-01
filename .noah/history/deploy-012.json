@@ -1,0 +1,13 @@
+{
+  "deploymentId": "srv-d8oij8dckfvc73fqf6t0",
+  "sequence": 12,
+  "platform": "render_vercel",
+  "strategy": "D",
+  "database": "atlas",
+  "status": "success",
+  "commit": "ccb9cc953ed3ba47d3570668bc34d92fb3c20f15",
+  "deploymentUrl": "https://job-portal-eta-flame.vercel.app",
+  "durationMs": 71812,
+  "generatedFiles": [],
+  "createdAt": "2026-07-01T17:36:04.343Z"
+}
